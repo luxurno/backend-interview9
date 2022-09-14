@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Messenger\EmailVerification\CommandHandler;
 
-use App\Entity\EmailVerification;
+use App\Factory\EmailVerificationFactory;
 use App\Messenger\Message\EmailMessage;
 use App\Repository\EmailRepository;
 use App\Repository\EmailVerificationRepository;
@@ -17,7 +17,8 @@ class EmailVerificationCommandHandler
 {
     public function __construct(
         private readonly EmailRepository             $emailRepository,
-        private readonly EmailVerificationRepository $repository,
+        private readonly EmailVerificationFactory    $emailVerificationFactory,
+        private readonly EmailVerificationRepository $emailVerificationRepository,
         private readonly EmailVerificationClient     $client,
     ) { }
 
@@ -27,7 +28,8 @@ class EmailVerificationCommandHandler
         $result = $this->client->verify($email->getEmail());
 
         if ($result) {
-            $verification = (new EmailVerification())
+            // TODO remove self returned types
+            $verification = ($this->emailVerificationFactory->factory())
                 ->setResult($result['result'] ?? '')
                 ->setCreatedAt(new DateTimeImmutable())
                 ->setIsCatchall(boolval($result['catchall'] ?? false))
@@ -42,7 +44,7 @@ class EmailVerificationCommandHandler
             $email->addEmailVerification($verification);
             $email->setLastVerifiedAt($verification->getCreatedAt());
 
-            $this->repository->add($verification, true);
+            $this->emailVerificationRepository->add($verification, true);
         }
     }
 }

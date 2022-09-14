@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests\Controller;
+namespace App\Tests\Integration\Controller;
 
 use App\Entity\Email;
 use App\Entity\EmailVerification;
@@ -15,7 +15,6 @@ use Symfony\Component\Messenger\MessageBusInterface;
 
 class EmailControllerTest extends WebTestCase
 {
-    private const VALID_ID_EMAIL = 1;
     private const VALID_EMAIL = 'test@example.com';
     private const INVALID_EMAIL = 'test at example.com';
     private KernelBrowser $client;
