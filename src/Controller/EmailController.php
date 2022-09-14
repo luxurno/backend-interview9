@@ -39,8 +39,6 @@ class EmailController extends AbstractController
 
             $emailRepository->add($entity);
         }
-
-        // TODO: Move verification to queue
         $emailVerificationService->verify($entity);
 
         return $this->json(['success' => true, 'id' => $entity->getId()]);

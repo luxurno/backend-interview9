@@ -38,7 +38,7 @@ Currently, there are 3 endpoints available:
 Please, update the code to return 204 response when no verification info available.
 2) Currently, POST request always runs email verification in-place. 
 Please, update the code to queue the verification using Symfony Messenger component instead. 
-Use existing `EmailMessage` class.
+Use existing `EmailMessage` class. [No DDD]
 3) Implement message handler for `EmailMessage` class. Add unit test for the handler.
 4) Implement CachedEmailVerificationClient - use cache for requests, set TTL to 1 week.
 
