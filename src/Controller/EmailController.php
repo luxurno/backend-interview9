@@ -37,7 +37,7 @@ class EmailController extends AbstractController
                 throw new UnprocessableEntityHttpException("Invalid email address provided");
             }
 
-            $emailRepository->add($entity);
+            $emailRepository->add($entity, true);
         }
         $emailVerificationService->verify($entity);
 

@@ -15,6 +15,7 @@ use Symfony\Component\Messenger\MessageBusInterface;
 
 class EmailControllerTest extends WebTestCase
 {
+    private const VALID_ID_EMAIL = 1;
     private const VALID_EMAIL = 'test@example.com';
     private const INVALID_EMAIL = 'test at example.com';
     private KernelBrowser $client;
@@ -61,7 +62,7 @@ class EmailControllerTest extends WebTestCase
         $this->emailVerificationClientMock->expects($this->never())->method('verify');
         $this->messageBusMock->expects($this->once())->method('dispatch')
             ->will($this->returnCallback(function ($emailMessage) : Envelope {
-                $this->assertEquals(EmailMessage::class, get_class($emailMessage));
+                $this->assertEquals(EmailMessage::class, $emailMessage::class);
                 return new Envelope($emailMessage);
             }));
 
