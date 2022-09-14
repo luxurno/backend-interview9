@@ -154,8 +154,6 @@ class EmailControllerTest extends WebTestCase
         $this->client->xmlHttpRequest('GET', sprintf('%s%s', $this->path, $fixture->getEmail()));
 
         self::assertResponseStatusCodeSame(204);
-        $this->assertJson($this->client->getResponse()->getContent());
-        $this->assertJsonStringEqualsJsonString(json_encode($fixture), $this->client->getResponse()->getContent());
     }
 
     public function testRemove(): void
