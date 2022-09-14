@@ -8,6 +8,7 @@ use App\Service\EmailVerificationService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
@@ -46,12 +47,18 @@ class EmailController extends AbstractController
     }
 
     #[Route('/{email}', name: 'app_email_show', methods: ['GET'])]
-    public function show(string $email, EmailRepository $emailRepository): JsonResponse
+    public function show(
+        string $email,
+        EmailRepository $emailRepository,
+        EmailVerificationService $emailVerificationService,
+    ): JsonResponse
     {
         $email = $emailRepository->findOneBy(['email' => $email]) or
             throw new NotFoundHttpException('Email not found');
 
-        // TODO: Return 204 code if verification is not yet completed
+        if (0 === $emailVerificationService->getVerificationCount($email)) {
+            return new JsonResponse([], Response::HTTP_NO_CONTENT);
+        }
 
         return $this->json($email);
     }

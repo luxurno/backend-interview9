@@ -23,7 +23,7 @@ class EmailVerificationService
         $this->entityManager = $entityManager;
     }
 
-    public function verify(Email $email)
+    public function verify(Email $email): void
     {
         $result = $this->client->verify($email->getEmail());
         if ($result) {
@@ -45,5 +45,10 @@ class EmailVerificationService
             $this->repository->add($verification, true);
 
         }
+    }
+
+    public function getVerificationCount(Email $email): int
+    {
+        return $email->getEmailVerifications()->count();
     }
 }
